@@ -27,10 +27,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = Post::create([
-            'title' => $request->input('title'),
-            'text' => $request->input('text')
-        ]);
+        $post = Post::create($request->all());
 
         return response()
             ->json(['success' => true]);
