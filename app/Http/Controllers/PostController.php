@@ -44,8 +44,6 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post = Post::find($post->id);
-
         return $post;
     }
 
@@ -58,8 +56,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $post = Post::find($post->id);
-
         $post->title = $request->input('title');
         $post->text = $request->input('text');
 
@@ -77,8 +73,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post = Post::find($post->id);
-
         $post->delete();
 
         return response()
