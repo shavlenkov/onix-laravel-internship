@@ -17,19 +17,16 @@ class AuthController extends Controller
     public function postSignup(Request $request)
     {
 
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|min: 3|max: 10',
             'surname' => 'required|min: 3|max: 45',
             'login' => 'required|unique:users|alpha_dash|min: 3|max: 30',
             'password' => 'required|min: 8'
         ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'surname' => $request->input('surname'),
-            'login' => $request->input('login'),
-            'password' => bcrypt($request->input('password'))
-        ]);
+        $data['password'] = bcrypt($data['password']);
+
+        $user = User::create($data);
 
         Auth::loginUsingId($user->id);
 
