@@ -13,12 +13,8 @@
                     <input type="text" class="form-control" value="{{ old('name') }}" name="name" id="name"/>
                 </div>
                 <div class="mb-4">
-                    <label for="surname" class="form-label">Прізвище</label>
-                    <input type="text" class="form-control" name="surname" value="{{ old('surname') }}" id="surname"/>
-                </div>
-                <div class="mb-4">
-                    <label for="login" class="form-label">Логін</label>
-                    <input type="text" class="form-control" name="login" value="{{ old('login') }}" id="login"/>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" name="email" value="{{ old('email') }}" id="email"/>
                 </div>
                 <div class="mb-4">
                     <label for="login" class="form-label">Пароль</label>
