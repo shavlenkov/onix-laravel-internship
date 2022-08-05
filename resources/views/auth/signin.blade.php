@@ -9,8 +9,8 @@
             <form method="POST" action="{{ route('post.signin') }}">
                 @csrf
                 <div class="mb-4">
-                    <label for="login" class="form-label">Логін</label>
-                    <input type="text" class="form-control" value="{{ old('login') }}" name="login" id="login"/>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" value="{{ old('email') }}" name="email" id="email"/>
                 </div>
                 <div class="mb-4">
                     <label for="login" class="form-label">Пароль</label>
