@@ -12,6 +12,7 @@ class Post extends Model
     protected $fillable = [
         'id',
         'title',
+        'keywords',
         'text'
     ];
 }
