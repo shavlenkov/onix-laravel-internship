@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 use Auth;
 
@@ -18,10 +19,9 @@ class AuthController extends Controller
     {
 
         $data = $request->validate([
-            'name' => 'required|min: 3|max: 10',
-            'surname' => 'required|min: 3|max: 45',
-            'login' => 'required|unique:users|alpha_dash|min: 3|max: 30',
-            'password' => 'required|min: 8'
+            'name' => 'required',
+            'email' => 'required|unique:users|email:rfc,dns',
+            'password' => ['required', Password::min(6)->mixedCase()->numbers()]
         ]);
 
         $data['password'] = bcrypt($data['password']);
@@ -42,11 +42,11 @@ class AuthController extends Controller
     {
 
         $request->validate([
-            'login' => 'required|min: 3|max: 30',
-            'password' => 'required|min: 8'
+            'email' => 'required',
+            'password' => 'required'
         ]);
 
-        if (!Auth::attempt($request->only(['login', 'password']))) {
+        if (!Auth::attempt($request->only(['email', 'password']))) {
             return redirect()
                 ->back();
         }
