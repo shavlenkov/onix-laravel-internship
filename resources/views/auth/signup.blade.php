@@ -25,7 +25,6 @@
                     <a class="btn btn-outline-secondary" href="/signin">Увійти в профіль</a>
                     <button type="submit" class="btn btn-primary">Зареєструватись</button>
                 </div>
-
             </form>
         </div>
     </div>
