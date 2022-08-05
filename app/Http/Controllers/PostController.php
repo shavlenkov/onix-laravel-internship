@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreUpdatePostRequest;
 
 class PostController extends Controller
 {
@@ -23,7 +23,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUpdatePostRequest $request)
     {
         $post = Post::create($request->all());
 
@@ -49,9 +49,10 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(StoreUpdatePostRequest $request, Post $post)
     {
         $post->title = $request->input('title');
+        $post->keywords = $request->input('keywords');
         $post->text = $request->input('text');
 
         $post->save();
