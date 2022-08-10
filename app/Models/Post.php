@@ -13,6 +13,6 @@ class Post extends Model
         'id',
         'title',
         'keywords',
-        'text'
+        'text',
     ];
 }
