@@ -13,6 +13,6 @@ class User extends Authenticatable
         'id',
         'name',
         'email',
-        'password'
+        'password',
     ];
 }
