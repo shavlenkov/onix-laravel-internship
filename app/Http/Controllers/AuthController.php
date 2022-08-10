@@ -21,7 +21,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
-            'password' => ['required', Password::min(6)->mixedCase()->numbers()]
+            'password' => ['required', Password::min(6)->mixedCase()->numbers()],
         ]);
 
         $data['password'] = bcrypt($data['password']);
@@ -43,7 +43,7 @@ class AuthController extends Controller
 
         $request->validate([
             'email' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (!Auth::attempt($request->only(['email', 'password']))) {
