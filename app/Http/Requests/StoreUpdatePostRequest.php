@@ -9,13 +9,13 @@ class StoreUpdatePostRequest extends FormRequest
 
     public function messages() {
         return [
-            'title.required' => "Поле :attribute є обов'язковим",
-            'title.min' => 'Поле :attribute повинно мати мінімум :min символів',
-            'title.max' => 'Поле :attribute повинно мати максимум :max символів',
-            'text.required' => "Поле :attribute є обов'язковим",
-            'text.min' => "Поле :attribute повинно мати мінімум :min символів",
-            'cover.image' => "Поле :attribute повинно бути зображенням",
-            'cover.mimes' => "Поле :attribute повинно бути файлом типу: png, jpeg, gif"
+            'title.required' => "Поле :attribute є обов'язковим.",
+            'title.min' => 'Поле :attribute повинно мати мінімум :min символів.',
+            'title.max' => 'Поле :attribute повинно мати максимум :max символів.',
+            'text.required' => "Поле :attribute є обов'язковим.",
+            'text.min' => "Поле :attribute повинно мати мінімум :min символів.",
+            'cover.image' => "Поле :attribute повинно бути зображенням.",
+            'cover.mimes' => "Поле :attribute повинно бути файлом типу: png, jpeg, gif."
         ];
     }
 
@@ -29,7 +29,7 @@ class StoreUpdatePostRequest extends FormRequest
         return [
             'title' => 'required|min:5|max:150',
             'text' => 'required|min:10',
-            'cover'=> 'image|mimes:png,jpeg,gif'
+            'cover'=> 'image|mimes:png,jpeg,gif',
         ];
     }
 }
