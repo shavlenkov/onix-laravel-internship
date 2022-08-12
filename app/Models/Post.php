@@ -14,5 +14,6 @@ class Post extends Model
         'title',
         'keywords',
         'text',
+        'userId'
     ];
 }
