@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('guest')->namespace('\App\Http\Controllers')->group(function() {
+Route::get('/locale/{locale}', function ($locale) {
+    Session::put('locale', $locale);
+
+    return redirect()->back();
+})->name('locale');
+
+Route::middleware('guest')->namespace('\App\Http\Controllers\Web')->group(function() {
     Route::get('/signup', 'AuthController@getSignup')->name('get.signup');
     Route::post('/auth/signup', 'AuthController@postSignup')->name('post.signup');
 
@@ -21,8 +27,13 @@ Route::middleware('guest')->namespace('\App\Http\Controllers')->group(function()
     Route::post('/auth/signin', 'AuthController@postSignin')->name('post.signin');
 });
 
-Route::get('/logout', 'App\Http\Controllers\AuthController@logout')->name('get.logout');
+Route::get('/logout', 'App\Http\Controllers\Web\AuthController@logout')->name('get.logout');
 
-Route::middleware('auth')->namespace('\App\Http\Controllers')->group(function() {
+Route::middleware('auth')->namespace('\App\Http\Controllers\Web')->group(function() {
     Route::get('/profile', 'UserController@profile')->name('profile');
+
+    Route::resource('posts', 'PostController')->except([
+        'destroy'
+    ]);
+
 });
