@@ -33,7 +33,7 @@ class AuthController extends Controller
         Auth::loginUsingId($user->id);
 
         return redirect()
-            ->route('profile');
+            ->route('posts.index');
     }
 
     public function getSignin() {
@@ -54,10 +54,10 @@ class AuthController extends Controller
         }
 
         return redirect()
-            ->route('profile');
+            ->route('posts.index');
     }
 
-    public function logout()
+    public function getSignout()
     {
         Auth::logout();
 
