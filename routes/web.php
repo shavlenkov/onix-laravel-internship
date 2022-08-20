@@ -19,6 +19,7 @@ Route::get('/locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('locale');
 
+
 Route::middleware('guest')->namespace('\App\Http\Controllers\Web')->group(function() {
     Route::get('/signup', 'AuthController@getSignup')->name('get.signup');
     Route::post('/auth/signup', 'AuthController@postSignup')->name('post.signup');
@@ -27,13 +28,10 @@ Route::middleware('guest')->namespace('\App\Http\Controllers\Web')->group(functi
     Route::post('/auth/signin', 'AuthController@postSignin')->name('post.signin');
 });
 
-Route::get('/logout', 'App\Http\Controllers\Web\AuthController@logout')->name('get.logout');
+Route::get('/signout', 'App\Http\Controllers\Web\AuthController@getSignout')->name('get.signout');
 
 Route::middleware('auth')->namespace('\App\Http\Controllers\Web')->group(function() {
-    Route::get('/profile', 'UserController@profile')->name('profile');
-
     Route::resource('posts', 'PostController')->except([
         'destroy'
     ]);
-
 });
