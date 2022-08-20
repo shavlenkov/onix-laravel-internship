@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\UserController;
 */
 
 Route::post('/auth/signup', [AuthController::class, 'postSignup']);
-Route::post('/auth/login', [AuthController::class, 'postSignin']);
+Route::post('/auth/signin', [AuthController::class, 'postSignin']);
 Route::post('/auth/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->namespace('\App\Http\Controllers\Api')->group(function() {
