@@ -18,18 +18,18 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-Route::post('/auth/signup', [AuthController::class, 'postSignup']);
-Route::post('/auth/signin', [AuthController::class, 'postSignin']);
-Route::post('/auth/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
+Route::post('/signup', [AuthController::class, 'postSignup']);
+Route::post('/signin', [AuthController::class, 'postSignin']);
+Route::post('/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->namespace('\App\Http\Controllers\Api')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
     Route::get('/profile', [UserController::class, 'profile']);
 
-    Route::apiResource('users', 'UserController')->only([
+    Route::apiResource('users', UserController::class)->only([
         'index', 'update', 'destroy'
     ]);
 
-    Route::apiResource('posts', 'PostController', [
+    Route::apiResource('posts', PostController::class, [
         'as' => 'api'
     ]);
 });

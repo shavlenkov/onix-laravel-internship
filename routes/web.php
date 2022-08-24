@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Web\PostController;
+use App\Http\Controllers\Web\AuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,19 +22,18 @@ Route::get('/locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('locale');
 
+Route::middleware('guest')->group(function() {
+    Route::get('/signup', [AuthController::class, 'getSignup'])->name('get.signup');
+    Route::post('/auth/signup', [AuthController::class, 'postSignup'])->name('post.signup');
 
-Route::middleware('guest')->namespace('\App\Http\Controllers\Web')->group(function() {
-    Route::get('/signup', 'AuthController@getSignup')->name('get.signup');
-    Route::post('/auth/signup', 'AuthController@postSignup')->name('post.signup');
-
-    Route::get('/signin', 'AuthController@getSignin')->name('get.signin');
-    Route::post('/auth/signin', 'AuthController@postSignin')->name('post.signin');
+    Route::get('/signin', [AuthController::class, 'getSignin'])->name('get.signin');
+    Route::post('/auth/signin', [AuthController::class, 'postSignin'])->name('post.signin');
 });
 
-Route::get('/signout', 'App\Http\Controllers\Web\AuthController@getSignout')->name('get.signout');
+Route::get('/signout', [AuthController::class, 'getSignout'])->name('get.signout');
 
-Route::middleware('auth')->namespace('\App\Http\Controllers\Web')->group(function() {
-    Route::resource('posts', 'PostController')->except([
+Route::middleware('auth')->group(function() {
+    Route::resource('posts', PostContoller::class)->except([
         'destroy'
     ]);
 });
