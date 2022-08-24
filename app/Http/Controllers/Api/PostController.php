@@ -4,19 +4,33 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Post;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdatePostRequest;
+
+use App\Models\Post;
 
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Post::all();
+
+        $posts = Post::simplePaginate(config('app.paginate'));
+
+        $keywords = $request->query('keywords');
+
+        if(!empty($keywords)) {
+            $posts = Post::where('title', 'like', "%{$keywords}%")
+                ->orWhere('text', 'like', "%{$keywords}%")->get();
+        }
+
+        return $posts;
+
     }
 
     /**
@@ -76,4 +90,5 @@ class PostController extends Controller
         return response()
             ->json(['success' => true]);
     }
+
 }
