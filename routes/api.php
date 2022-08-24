@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
-
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
@@ -25,9 +23,13 @@ Route::post('/auth/signin', [AuthController::class, 'postSignin']);
 Route::post('/auth/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->namespace('\App\Http\Controllers\Api')->group(function() {
-    Route::get('/profile', 'UserController@profile');
+    Route::get('/profile', [UserController::class, 'profile']);
 
-    Route::apiResource('posts', 'UserController', [
+    Route::apiResource('users', 'UserController')->only([
+        'index', 'update', 'destroy'
+    ]);
+
+    Route::apiResource('posts', 'PostController', [
         'as' => 'api'
     ]);
 });
