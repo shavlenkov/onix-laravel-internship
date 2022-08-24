@@ -3,17 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Auth;
 
 class StoreUpdatePostRequest extends FormRequest
 {
 
     public function authorize() {
-        if(!empty(Auth::user())) {
-            return true;
-        } else {
-            return false;
-        }
+        return auth()->check();
     }
 
     public function messages() {
