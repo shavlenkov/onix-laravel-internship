@@ -18,8 +18,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
-            'password' => ['required', Password::min(6)->mixedCase()->numbers()],
-            'password_confirmation' => 'requiredWith:password|same:password',
+            'password' => ['required', 'confirmed', Password::min(6)->mixedCase()->numbers()],
+            'password_confirmation' => 'requiredWith:password',
         ];
     }
 }
