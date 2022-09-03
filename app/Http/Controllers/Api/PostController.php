@@ -9,8 +9,9 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdatePostRequest;
 
-use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
+
+use Auth;
 
 class PostController extends Controller
 {
@@ -36,7 +37,7 @@ class PostController extends Controller
             $post['keywords'] = $post->tags;
         }
 
-        return new PostCollection($posts);
+        return PostResource::collection($posts);
     }
 
     /**
@@ -50,7 +51,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->input('title'),
             'text' => $request->input('text'),
-            'userId' => $request->input('userId')
+            'userId' => Auth::user()->id,
         ]);
 
         $post->tags()->create(['name' => $request->input('keywords')]);
