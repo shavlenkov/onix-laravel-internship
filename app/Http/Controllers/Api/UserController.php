@@ -10,6 +10,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
 
+use App\Http\Resources\UserCollection;
+
 class UserController extends Controller
 {
     public function profile()
@@ -24,6 +26,9 @@ class UserController extends Controller
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
         $keywords = $request->query('keywords');
+
+        $authors = $request->query('authors');
+        $sortBy = $request->query('sortBy');
 
         if(!empty($startDate) && !empty($endDate) && empty($keywords)) {
             $users = User::where('created_at', '>', $startDate)
@@ -40,7 +45,14 @@ class UserController extends Controller
             $user['count_posts'] = count(Post::where('userId', $user->id)->get());
         }
 
-        return $users;
+        if($sortBy == 'top') {
+            $users = $users->sortBy('count_posts');
+        }
+        if($authors == 'true') {
+            $users = $users->where('count_posts', '>=', 1);
+        }
+
+        return new UserCollection($users);
     }
 
     public function update(UpdateUserRequest $request, User $user)
