@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/profile', [UserController::class, 'profile']);
 
     Route::apiResource('users', UserController::class)->only([
-        'index', 'update', 'destroy'
+        'index', 'show', 'update', 'destroy'
     ]);
 
     Route::apiResource('posts', PostController::class, [
