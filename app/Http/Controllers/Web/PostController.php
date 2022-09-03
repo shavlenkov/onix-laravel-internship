@@ -19,7 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $id = Auth::user()->getId();
+        $id = Auth::user()->id;
 
         $posts = Post::where('userId', $id)->simplePaginate(config('app.paginate'));
 
@@ -49,7 +49,7 @@ class PostController extends Controller
         $data = $request->validated();
 
         $data['keywords'] = $request->input('keywords');
-        $data['userId'] = Auth::user()->getId();
+        $data['userId'] = Auth::user()->id;
 
         $post = Post::create($data);
 
