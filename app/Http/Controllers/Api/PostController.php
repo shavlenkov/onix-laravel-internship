@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Post;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdatePostRequest;
 
-use App\Models\Post;
+use App\Http\Resources\PostCollection;
+use App\Http\Resources\PostResource;
 
 class PostController extends Controller
 {
@@ -19,7 +22,6 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-
         $posts = Post::simplePaginate(config('app.paginate'));
 
         $keywords = $request->query('keywords');
@@ -29,8 +31,12 @@ class PostController extends Controller
                 ->orWhere('text', 'like', "%{$keywords}%")->get();
         }
 
-        return $posts;
+        foreach($posts as $post) {
+            $post['author'] = $post->user;
+            $post['keywords'] = $post->tags;
+        }
 
+        return new PostCollection($posts);
     }
 
     /**
@@ -41,7 +47,13 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $post = Post::create($request->all());
+        $post = Post::create([
+            'title' => $request->input('title'),
+            'text' => $request->input('text'),
+            'userId' => $request->input('userId')
+        ]);
+
+        $post->tags()->create(['name' => $request->input('keywords')]);
 
         return response()
             ->json(['success' => true]);
@@ -55,7 +67,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+        $post['author'] = $post->user;
+        $post['keywords'] = $post->tags;
+
+        return new PostResource($post);
     }
 
     /**
@@ -68,8 +83,8 @@ class PostController extends Controller
     public function update(StoreUpdatePostRequest $request, Post $post)
     {
         $post->title = $request->input('title');
-        $post->keywords = $request->input('keywords');
         $post->text = $request->input('text');
+        $post->tags()->update(['name' => $request->input('keywords')]);
 
         $post->save();
 
