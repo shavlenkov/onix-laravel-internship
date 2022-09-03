@@ -10,7 +10,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
 
-use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -52,7 +52,13 @@ class UserController extends Controller
             $users = $users->where('count_posts', '>=', 1);
         }
 
-        return new UserCollection($users);
+        return UserResource::collection($users);
+    }
+
+    public function show(User $user) {
+        $user['count_posts'] = count(Post::where('userId', $user->id)->get());
+
+        return new UserResource($user);
     }
 
     public function update(UpdateUserRequest $request, User $user)
