@@ -33,7 +33,7 @@ Route::middleware('guest')->group(function() {
 Route::get('/signout', [AuthController::class, 'getSignout'])->name('get.signout');
 
 Route::middleware('auth')->group(function() {
-    Route::resource('posts', PostContoller::class)->except([
+    Route::resource('posts', PostController::class)->except([
         'destroy'
     ]);
 });
