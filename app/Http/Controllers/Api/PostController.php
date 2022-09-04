@@ -28,8 +28,25 @@ class PostController extends Controller
         $keywords = $request->query('keywords');
 
         if(!empty($keywords)) {
-            $posts = Post::where('title', 'like', "%{$keywords}%")
-                ->orWhere('text', 'like', "%{$keywords}%")->get();
+            $posts = Post::search($keywords);
+        }
+
+        foreach($posts as $post) {
+            $post['author'] = $post->user;
+            $post['keywords'] = $post->tags;
+        }
+
+        return PostResource::collection($posts);
+    }
+
+    public function search(Request $request)
+    {
+        $posts = Post::withoutGlobalScopes()->simplePaginate(config('app.paginate'));
+
+        $keywords = $request->query('keywords');
+
+        if(!empty($keywords)) {
+            $posts = Post::search($keywords);
         }
 
         foreach($posts as $post) {

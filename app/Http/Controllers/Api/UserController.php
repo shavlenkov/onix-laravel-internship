@@ -30,26 +30,23 @@ class UserController extends Controller
         $authors = $request->query('authors');
         $sortBy = $request->query('sortBy');
 
-        if(!empty($startDate) && !empty($endDate) && empty($keywords)) {
-            $users = User::where('created_at', '>', $startDate)
-                ->where('created_at', '<', $endDate);
-        } else if(empty($startDate) && empty($endDate) && !empty($keywords)) {
-            $users = User::where('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$");
-        } else if(!empty($startDate) && !empty($endDate) && !empty($keywords)) {
-            $users = User::where('created_at', '>', $startDate)
-                ->where('created_at', '<', $endDate)
-                ->where('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$");
-        }
-
         foreach($users as $user) {
             $user['count_posts'] = count(Post::where('userId', $user->id)->get());
         }
 
+        if(!empty($startDate) && !empty($endDate) && empty($keywords)) {
+            $users = User::dateInterval($startDate, $endDate)->get();
+        } else if(empty($startDate) && empty($endDate) && !empty($keywords)) {
+            $users = User::searchByEmail($keywords)->get();
+        } else if(!empty($startDate) && !empty($endDate) && !empty($keywords)) {
+            $users = User::dateInterval($startDate, $endDate)->searchByEmail($keywords)->get();
+        }
+
         if($sortBy == 'top') {
-            $users = $users->sortBy('count_posts');
+            $users = User::sort($sortBy)->get();
         }
         if($authors == 'true') {
-            $users = $users->where('count_posts', '>=', 1);
+            $users = User::authors()->get();
         }
 
         return UserResource::collection($users);
