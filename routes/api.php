@@ -24,6 +24,8 @@ Route::prefix('auth')->group(function() {
     Route::post('/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
 });
 
+Route::get('/posts/search', [PostController::class, 'search']);
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/profile', [UserController::class, 'profile']);
 
@@ -31,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function() {
         'index', 'show', 'update', 'destroy'
     ]);
 
-    Route::apiResource('posts', PostController::class, [
+    Route::apiResource('/posts/my', PostController::class, [
         'as' => 'api'
     ]);
 });
