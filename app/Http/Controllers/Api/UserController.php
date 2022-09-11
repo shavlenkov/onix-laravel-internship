@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function index(Request $request) {
 
-        $users = User::simplePaginate(config('app.paginate'));
+        $users = User::withCount('posts')->simplePaginate(config('app.paginate'));
 
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
@@ -30,30 +30,27 @@ class UserController extends Controller
         $authors = $request->query('authors');
         $sortBy = $request->query('sortBy');
 
-        foreach($users as $user) {
-            $user['count_posts'] = count(Post::where('userId', $user->id)->get());
-        }
-
         if(!empty($startDate) && !empty($endDate) && empty($keywords)) {
-            $users = User::dateInterval($startDate, $endDate)->get();
+            $users = User::dateInterval($startDate, $endDate);
         } else if(empty($startDate) && empty($endDate) && !empty($keywords)) {
-            $users = User::searchByEmail($keywords)->get();
+            $users = User::searchByEmail($keywords);
         } else if(!empty($startDate) && !empty($endDate) && !empty($keywords)) {
-            $users = User::dateInterval($startDate, $endDate)->searchByEmail($keywords)->get();
+            $users = User::dateInterval($startDate, $endDate)->searchByEmail($keywords);
         }
 
         if($sortBy == 'top') {
-            $users = User::sort($sortBy)->get();
+            $users = User::sort($sortBy);
         }
+
         if($authors == 'true') {
-            $users = User::authors()->get();
+            $users = User::authors();
         }
 
         return UserResource::collection($users);
     }
 
     public function show(User $user) {
-        $user['count_posts'] = count(Post::where('userId', $user->id)->get());
+        $user['posts_count'] = count(Post::where('userId', $user->id)->get());
 
         return new UserResource($user);
     }
