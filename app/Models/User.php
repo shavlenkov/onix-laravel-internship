@@ -18,23 +18,27 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function posts() {
+        return $this->hasMany(Post::class, 'userId');
+    }
+
     public function scopeDateInterval($query, $startDate, $endDate) {
-        return $query->where('created_at', '>', $startDate)
-            ->where('created_at', '<', $endDate);
+        return $query->withCount('posts')->where('created_at', '>', $startDate)
+            ->where('created_at', '<', $endDate)->get();
     }
 
     public function scopeSearchByEmail($query, $keywords) {
-        return $query->where('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$");
+        return $query->withCount('posts')->where('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$")->get();
     }
 
     public function scopeSort($query, $param) {
         if($param == 'top') {
-            return $query->orderBy('count_posts', 'DESC');
+            return $this->withCount('posts')->orderBy('posts_count', 'DESC')->get();
         }
     }
 
     public function scopeAuthors($query) {
-        return $builder->where('count_posts', '>=', 1);
+        return $query->withCount('posts')->having('posts_count', '>=', 1)->get();
     }
 
 }
