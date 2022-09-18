@@ -15,7 +15,8 @@ class AuthController extends Controller
     public function postSignup(Request $request) {
 
         $data = $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
             'password' => ['required', Password::min(6)->mixedCase()->numbers()],
         ]);
