@@ -9,8 +9,12 @@
             <form method="POST" action="{{ route('post.signup') }}">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="form-label">{{ __('messages.auth.label.name') }}</label>
-                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" id="name"/>
+                    <label for="name" class="form-label">{{ __('messages.auth.label.first_name') }}</label>
+                    <input type="text" class="form-control" value="{{ old('first_name') }}" name="first_name" id="first_name"/>
+                </div>
+                <div class="mb-4">
+                    <label for="name" class="form-label">{{ __('messages.auth.label.last_name') }}</label>
+                    <input type="text" class="form-control" value="{{ old('last_name') }}" name="last_name" id="last_name"/>
                 </div>
                 <div class="mb-4">
                     <label for="email" class="form-label">{{ __('messages.auth.label.email') }}</label>
