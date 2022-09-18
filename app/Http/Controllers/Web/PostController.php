@@ -19,9 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $id = Auth::user()->id;
-
-        $posts = Post::where('userId', $id)->simplePaginate(config('app.paginate'));
+        $posts = Post::simplePaginate(config('app.paginate'));
 
         return view('posts.index')
             ->with('posts',  $posts);
@@ -47,11 +45,10 @@ class PostController extends Controller
     {
 
         $data = $request->validated();
-
-        $data['keywords'] = $request->input('keywords');
         $data['userId'] = Auth::user()->id;
 
         $post = Post::create($data);
+        $post->tags()->create(['name' => $request->input('keywords')]);
 
         return redirect()
             ->route('posts.index');
@@ -93,8 +90,9 @@ class PostController extends Controller
     public function update(StoreUpdatePostRequest $request, Post $post)
     {
         $post->title = $request->input('title');
-        $post->keywords = $request->input('keywords');
         $post->text = $request->input('text');
+
+        $post->tags()->update(['name' => $request->input('keywords')]);
 
         $post->save();
 
