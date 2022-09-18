@@ -65,11 +65,10 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $post = Post::create([
-            'title' => $request->input('title'),
-            'text' => $request->input('text'),
-            'userId' => Auth::user()->id,
-        ]);
+        $data = $request->validated();
+        $data['userId'] = Auth::user()->id;
+
+        $post = Post::create($data);
 
         $post->tags()->create(['name' => $request->input('keywords')]);
 
@@ -102,6 +101,7 @@ class PostController extends Controller
     {
         $post->title = $request->input('title');
         $post->text = $request->input('text');
+
         $post->tags()->update(['name' => $request->input('keywords')]);
 
         $post->save();
@@ -118,6 +118,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->tags()->delete();
         $post->delete();
 
         return response()
