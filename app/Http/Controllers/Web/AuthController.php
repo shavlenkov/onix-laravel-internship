@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
 use Auth;
+use App\Events\UserRegistered;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,8 @@ class AuthController extends Controller
     {
 
         $data = $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
             'password' => ['required', Password::min(6)->mixedCase()->numbers()],
         ]);
