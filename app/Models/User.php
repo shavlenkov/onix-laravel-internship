@@ -13,9 +13,12 @@ class User extends Authenticatable
 
     protected $fillable = [
         'id',
-        'name',
+        'first_name',
+        'last_name',
+        'full_name',
         'email',
         'password',
+        'total_posts'
     ];
 
     public function posts() {
@@ -39,6 +42,14 @@ class User extends Authenticatable
 
     public function scopeAuthors($query) {
         return $query->withCount('posts')->having('posts_count', '>=', 1)->get();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        User::saving(function ($model) {
+            $model->full_name = $model->first_name." ".$model->last_name;
+        });
     }
 
 }
