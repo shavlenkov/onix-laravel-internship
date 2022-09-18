@@ -6,7 +6,8 @@ return [
     'signin.title' => 'Вхід',
     'signup.title' => 'Реєстрація',
 
-    'auth.label.name' => "Ім'я",
+    'auth.label.first_name' => "Ім'я",
+    'auth.label.last_name' => "Прізвище",
     'auth.label.email' => 'Електронна пошта',
     'auth.label.password' => 'Пароль',
 

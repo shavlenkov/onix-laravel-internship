@@ -6,7 +6,8 @@ return [
     'signin.title' => 'Sign In',
     'signup.title' => 'Sign Up',
 
-    'auth.label.name' => 'Name',
+    'auth.label.first_name' => "First name",
+    'auth.label.last_name' => "Last name",
     'auth.label.email' => 'Email',
     'auth.label.password' => 'Password',
 
