@@ -33,9 +33,9 @@ Route::middleware('auth:sanctum')->group(function() {
         'index', 'show', 'update', 'destroy'
     ]);
 
-    Route::apiResource('/posts/my', PostController::class, [
+    Route::apiResource('posts/my', PostController::class, [
         'as' => 'api'
-    ]);
+    ])->parameters(['my' => 'post']);
 });
 
 
