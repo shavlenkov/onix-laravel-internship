@@ -26,22 +26,40 @@ class User extends Authenticatable
     }
 
     public function scopeDateInterval($query, $startDate, $endDate) {
-        return $query->withCount('posts')->where('created_at', '>', $startDate)
-            ->where('created_at', '<', $endDate)->get();
+
+        if(empty($startDate) || empty($endDate)) {
+            return $query;
+        }
+
+        return $query->withCount('posts')->having('created_at', '>', $startDate)
+            ->having('created_at', '<', $endDate);
     }
 
     public function scopeSearchByEmail($query, $keywords) {
-        return $query->withCount('posts')->where('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$")->get();
+
+        if(empty($keywords)) {
+            return $query;
+        }
+
+        return $query->withCount('posts')->having('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$");
     }
 
     public function scopeSort($query, $param) {
-        if($param == 'top') {
-            return $this->withCount('posts')->orderBy('posts_count', 'DESC')->get();
+
+        if(empty($param)) {
+            return $query;
+        } else if($param == 'top') {
+            return $query->withCount('posts')->orderBy('posts_count', 'DESC');
         }
     }
 
-    public function scopeAuthors($query) {
-        return $query->withCount('posts')->having('posts_count', '>=', 1)->get();
+    public function scopeAuthors($query, $param) {
+
+        if(empty($param)) {
+            return $query;
+        } else if($param == 'true') {
+            return $query->withCount('posts')->having('posts_count', '>=', 1);
+        }
     }
 
     protected static function boot()

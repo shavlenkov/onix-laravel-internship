@@ -30,21 +30,12 @@ class UserController extends Controller
         $authors = $request->query('authors');
         $sortBy = $request->query('sortBy');
 
-        if(!empty($startDate) && !empty($endDate) && empty($keywords)) {
-            $users = User::dateInterval($startDate, $endDate);
-        } else if(empty($startDate) && empty($endDate) && !empty($keywords)) {
-            $users = User::searchByEmail($keywords);
-        } else if(!empty($startDate) && !empty($endDate) && !empty($keywords)) {
-            $users = User::dateInterval($startDate, $endDate)->searchByEmail($keywords);
-        }
-
-        if($sortBy == 'top') {
-            $users = User::sort($sortBy);
-        }
-
-        if($authors == 'true') {
-            $users = User::authors();
-        }
+        $users = User::withCount('posts')
+            ->dateInterval($startDate, $endDate)
+            ->searchByEmail($keywords)
+            ->sort($sortBy)
+            ->authors($authors)
+            ->get();
 
         return UserResource::collection($users);
     }

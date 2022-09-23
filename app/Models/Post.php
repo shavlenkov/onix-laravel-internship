@@ -31,11 +31,12 @@ class Post extends Model
         return $this->belongsToMany(Tag::class, 'post_tags', 'postId', 'tagId');
     }
 
-    public function scopeSearch($query, $keywords) {
-        return $query->where('title', 'like', "%{$keywords}%")
-            ->orWhere('text', 'like', "%{$keywords}%")->get();
+    public function scopeTitle($query, $title) {
+        return $query->orWhere('title', 'like', "%{$title}%");
     }
 
-
+    public function scopeText($query, $text) {
+        return $query->orWhere('text', 'like', "%{$text}%");
+    }
 
 }

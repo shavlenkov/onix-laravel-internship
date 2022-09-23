@@ -23,13 +23,12 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $posts = Post::simplePaginate(config('app.paginate'));
 
         $keywords = $request->query('keywords');
 
-        if(!empty($keywords)) {
-            $posts = Post::search($keywords);
-        }
+        $posts = Post::title($keywords)
+            ->text($keywords)
+            ->simplePaginate(config('app.paginate'));
 
         foreach($posts as $post) {
             $post['author'] = $post->user;
@@ -41,13 +40,13 @@ class PostController extends Controller
 
     public function search(Request $request)
     {
-        $posts = Post::withoutGlobalScopes()->simplePaginate(config('app.paginate'));
 
         $keywords = $request->query('keywords');
 
-        if(!empty($keywords)) {
-            $posts = Post::search($keywords);
-        }
+        $posts = Post::withoutGlobalScopes()
+            ->title($keywords)
+            ->text($keywords)
+            ->simplePaginate(config('app.paginate'));
 
         foreach($posts as $post) {
             $post['author'] = $post->user;
