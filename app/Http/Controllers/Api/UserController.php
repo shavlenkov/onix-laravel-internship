@@ -21,8 +21,6 @@ class UserController extends Controller
 
     public function index(Request $request) {
 
-        $users = User::withCount('posts')->simplePaginate(config('app.paginate'));
-
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
         $keywords = $request->query('keywords');
@@ -35,7 +33,7 @@ class UserController extends Controller
             ->searchByEmail($keywords)
             ->sort($sortBy)
             ->authors($authors)
-            ->get();
+            ->simplePaginate(config('app.paginate'));
 
         return UserResource::collection($users);
     }
