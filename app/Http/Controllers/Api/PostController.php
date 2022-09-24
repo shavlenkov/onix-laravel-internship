@@ -13,8 +13,20 @@ use App\Http\Resources\PostResource;
 
 use Auth;
 
+use App\Services\PostService;
+
 class PostController extends Controller
 {
+
+    protected $postService;
+
+    /**
+     * PostController constructor.
+     */
+    public function __construct() {
+        $this->postService = new PostService();
+    }
+
     /**
      * Display a listing of the resource
      *
@@ -26,14 +38,7 @@ class PostController extends Controller
 
         $keywords = $request->query('keywords');
 
-        $posts = Post::title($keywords)
-            ->text($keywords)
-            ->simplePaginate(config('app.paginate'));
-
-        foreach($posts as $post) {
-            $post['author'] = $post->user;
-            $post['keywords'] = $post->tags;
-        }
+        $posts = $this->postService->getPosts($keywords, 'my');
 
         return PostResource::collection($posts);
     }
@@ -43,15 +48,7 @@ class PostController extends Controller
 
         $keywords = $request->query('keywords');
 
-        $posts = Post::withoutGlobalScopes()
-            ->title($keywords)
-            ->text($keywords)
-            ->simplePaginate(config('app.paginate'));
-
-        foreach($posts as $post) {
-            $post['author'] = $post->user;
-            $post['keywords'] = $post->tags;
-        }
+        $posts = $this->postService->getPosts($keywords, 'search');
 
         return PostResource::collection($posts);
     }
@@ -67,9 +64,7 @@ class PostController extends Controller
         $data = $request->validated();
         $data['userId'] = Auth::user()->id;
 
-        $post = Post::create($data);
-
-        $post->tags()->create(['name' => $request->input('keywords')]);
+        $this->postService->createPost($data, $request->input('keywords'));
 
         return response()
             ->json(['success' => true]);
@@ -98,12 +93,9 @@ class PostController extends Controller
      */
     public function update(StoreUpdatePostRequest $request, Post $post)
     {
-        $post->title = $request->input('title');
-        $post->text = $request->input('text');
+        $data = $request->validated();
 
-        $post->tags()->update(['name' => $request->input('keywords')]);
-
-        $post->save();
+        $this->postService->updatePost($post, $data, $keywords);
 
         return response()
             ->json(['success' => true]);
@@ -117,8 +109,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->tags()->delete();
-        $post->delete();
+        $this->postService->deletePost($post);
 
         return response()
             ->json(['success' => true]);

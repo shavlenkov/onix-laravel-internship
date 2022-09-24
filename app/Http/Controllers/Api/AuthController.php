@@ -4,14 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
 use Auth;
+use App\Services\UserService;
 
 class AuthController extends Controller
 {
+    protected $userService;
+
+    public function __construct() {
+        $this->userService = new UserService();
+    }
+
     public function postSignup(Request $request) {
 
         $data = $request->validate([
@@ -23,9 +29,7 @@ class AuthController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $user = User::create($data);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->userService->registerUser($data);
 
         return response()->json([
             'access_token' => $token,
@@ -35,7 +39,7 @@ class AuthController extends Controller
 
     public function postSignin(Request $request) {
 
-        $request->validate([
+        $data = $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
@@ -46,9 +50,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = User::where('email', $request['email'])->firstOrFail();
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->userService->loginUser($data);
 
         return response()->json([
             'access_token' => $token,
@@ -61,7 +63,7 @@ class AuthController extends Controller
 
         Auth::user()->currentAccessToken()->delete();
 
-        return  response()->json([
+        return response()->json([
             'ok' => true
         ]);
     }
