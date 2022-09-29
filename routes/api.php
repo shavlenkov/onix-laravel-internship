@@ -37,5 +37,3 @@ Route::middleware('auth:sanctum')->group(function() {
         'as' => 'api'
     ])->parameters(['my' => 'post']);
 });
-
-
