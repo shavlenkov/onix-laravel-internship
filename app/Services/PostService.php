@@ -6,9 +6,7 @@ use App\Models\Post;
 
 class PostService
 {
-    public function getPosts($data, string $status) {
-
-        [ 'keywords' => $keywords ] = $data;
+    public function getPosts($keywords, string $status) {
 
         if($status == 'my') {
             $posts = Post::title($keywords)
