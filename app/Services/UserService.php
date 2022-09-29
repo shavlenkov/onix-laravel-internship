@@ -11,8 +11,8 @@ class UserService
     public function getUsers($data) {
 
         [
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $dateInterval['startDate'],
+            'endDate' => $dateInterval['endDate'],
             'keywords' => $keywords,
             'sortBy' => $sortBy,
             'authors' => $authors

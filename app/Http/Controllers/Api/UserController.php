@@ -29,8 +29,10 @@ class UserController extends Controller
     public function index(Request $request) {
 
         $users = $this->userService->getUsers([
-            'startDate' => $request->query('startDate'),
-            'endDate' => $request->query('endDate'),
+            'dateInterval' => [
+                'startDate' => $request->query('startDate'),
+                'endDate' => $request->query('endDate'),
+            ],
             'keywords' => $request->query('keywords'),
             'authors' => $request->query('authors'),
             'sortBy' => $request->query('sortBy'),
