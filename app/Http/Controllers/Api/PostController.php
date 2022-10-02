@@ -95,7 +95,7 @@ class PostController extends Controller
     {
         $data = $request->validated();
 
-        $this->postService->updatePost($post, $data, $keywords);
+        $this->postService->updatePost($post, $data, $request->input('keywords'));
 
         return response()
             ->json(['success' => true]);
