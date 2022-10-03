@@ -15,6 +15,7 @@ class Post extends Model
         'id',
         'title',
         'text',
+        'cover',
         'userId'
     ];
 
