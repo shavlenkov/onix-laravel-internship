@@ -47,6 +47,14 @@ class PostController extends Controller
         $data = $request->validated();
         $data['userId'] = Auth::user()->id;
 
+        if(!empty($data['cover'])) {
+            $cover = $data['cover'];
+            $path = $cover->store('covers');
+            $data['cover'] = $path;
+        } else {
+            $data['cover'] = '';
+        }
+
         $post = Post::create($data);
         $post->tags()->create(['name' => $request->input('keywords')]);
 
@@ -91,6 +99,15 @@ class PostController extends Controller
     {
         $post->title = $request->input('title');
         $post->text = $request->input('text');
+
+        if(!empty($request->file('cover'))) {
+            $cover = $request->file('cover');
+
+            $path = $cover->store('covers');
+            $post->cover = $path;
+        } else {
+            $post->cover = "";
+        }
 
         $post->tags()->update(['name' => $request->input('keywords')]);
 
