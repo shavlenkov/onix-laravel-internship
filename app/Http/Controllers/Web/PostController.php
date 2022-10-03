@@ -8,10 +8,22 @@ use App\Http\Requests\StoreUpdatePostRequest;
 
 use App\Models\Post;
 
+use App\Services\PostService;
+
 use Auth;
 
 class PostController extends Controller
 {
+
+    protected $postService;
+
+    /**
+     * PostController constructor.
+     */
+    public function __construct() {
+        $this->postService = new PostService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,16 +59,7 @@ class PostController extends Controller
         $data = $request->validated();
         $data['userId'] = Auth::user()->id;
 
-        if(!empty($data['cover'])) {
-            $cover = $data['cover'];
-            $path = $cover->store('covers');
-            $data['cover'] = $path;
-        } else {
-            $data['cover'] = '';
-        }
-
-        $post = Post::create($data);
-        $post->tags()->create(['name' => $request->input('keywords')]);
+        $this->postService->createPost($data, $request->input('keywords'));
 
         return redirect()
             ->route('posts.index');
@@ -97,21 +100,9 @@ class PostController extends Controller
      */
     public function update(StoreUpdatePostRequest $request, Post $post)
     {
-        $post->title = $request->input('title');
-        $post->text = $request->input('text');
+        $data = $request->validated();
 
-        if(!empty($request->file('cover'))) {
-            $cover = $request->file('cover');
-
-            $path = $cover->store('covers');
-            $post->cover = $path;
-        } else {
-            $post->cover = "";
-        }
-
-        $post->tags()->update(['name' => $request->input('keywords')]);
-
-        $post->save();
+        $this->postService->updatePost($post, $data, $request->input('keywords'));
 
         return redirect()
             ->route('posts.index');
