@@ -30,7 +30,8 @@ class PostService
     public function createPost($data, string $keywords) {
 
         if(!empty($data['cover'])) {
-            $path = $data['cover']->store('covers');
+            $cover = $data['cover'];
+            $path = $cover->store('covers');
             $data['cover'] = $path;
         } else {
             $data['cover'] = '';
