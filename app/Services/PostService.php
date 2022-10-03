@@ -28,8 +28,15 @@ class PostService
     }
 
     public function createPost($data, string $keywords) {
-        $post = Post::create($data);
 
+        if(!empty($data['cover'])) {
+            $path = $data['cover']->store('covers');
+            $data['cover'] = $path;
+        } else {
+            $data['cover'] = '';
+        }
+
+        $post = Post::create($data);
         $post->tags()->create(['name' => $keywords]);
 
     }
@@ -43,6 +50,14 @@ class PostService
 
         $post->title = $title;
         $post->text = $text;
+
+        if(!empty($data['cover'])) {
+            $cover = $data['cover'];
+            $path = $cover->store('covers');
+            $post->cover = $path;
+        } else {
+            $post->cover = "";
+        }
 
         $post->tags()->update(['name' => $keywords]);
 
