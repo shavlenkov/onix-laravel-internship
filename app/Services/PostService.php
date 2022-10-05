@@ -6,7 +6,7 @@ use App\Models\Post;
 
 class PostService
 {
-    public function getPosts($keywords, string $status) {
+    public function getPosts($keywords, $status) {
 
         if($status == 'my') {
             $posts = Post::title($keywords)
@@ -27,14 +27,12 @@ class PostService
         return $posts;
     }
 
-    public function createPost($data, string $keywords) {
+    public function createPost($data, $keywords) {
 
         if(!empty($data['cover'])) {
             $cover = $data['cover'];
             $path = $cover->store('covers');
             $data['cover'] = $path;
-        } else {
-            $data['cover'] = '';
         }
 
         $post = Post::create($data);
@@ -42,7 +40,7 @@ class PostService
 
     }
 
-    public function updatePost(Post $post, $data, string $keywords) {
+    public function updatePost(Post $post, $data, $keywords) {
 
         [
             'title' => $title,
@@ -57,7 +55,7 @@ class PostService
             $path = $cover->store('covers');
             $post->cover = $path;
         } else {
-            $post->cover = "";
+            $post->cover = null;
         }
 
         $post->tags()->update(['name' => $keywords]);
@@ -69,6 +67,5 @@ class PostService
         $post->tags()->delete();
         $post->delete();
     }
-
 
 }
