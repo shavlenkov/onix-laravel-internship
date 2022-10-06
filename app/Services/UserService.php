@@ -10,7 +10,7 @@ use App\Models\User;
 
 class UserService
 {
-    public function getUsers($data) {
+    public function getUsers(array $data) {
 
         [
             'startDate' => $startDate,
@@ -37,7 +37,7 @@ class UserService
         return count(Post::where('userId', $user->id)->get());
     }
 
-    public function registerUser($data) {
+    public function registerUser(array $data) {
         $user = User::create($data);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -48,7 +48,7 @@ class UserService
         ]);
     }
 
-    public function loginUser($data) {
+    public function loginUser(array $data) {
 
         if (!Auth::attempt($data)) {
             return response()->json([
@@ -66,7 +66,7 @@ class UserService
         ]);
     }
 
-    public function updateUser(User $user, $data) {
+    public function updateUser(User $user, array $data) {
 
         [
             'first_name' => $first_name,

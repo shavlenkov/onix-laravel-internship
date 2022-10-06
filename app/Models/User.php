@@ -25,7 +25,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'userId');
     }
 
-    public function scopeDateInterval($query, $startDate, $endDate) {
+    public function scopeDateInterval($query, ?string $startDate, ?string $endDate) {
 
         if(empty($startDate) || empty($endDate)) {
             return $query;
@@ -35,7 +35,7 @@ class User extends Authenticatable
             ->having('created_at', '<', $endDate);
     }
 
-    public function scopeSearchByEmail($query, $keywords) {
+    public function scopeSearchByEmail($query, ?string $keywords) {
 
         if(empty($keywords)) {
             return $query;
@@ -44,7 +44,7 @@ class User extends Authenticatable
         return $query->withCount('posts')->having('email', 'regexp', "^{$keywords}+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$");
     }
 
-    public function scopeSort($query, $param) {
+    public function scopeSort($query, ?string $param) {
 
         if(empty($param)) {
             return $query;
@@ -53,7 +53,7 @@ class User extends Authenticatable
         }
     }
 
-    public function scopeAuthors($query, $param) {
+    public function scopeAuthors($query, ?string $param) {
 
         if(empty($param)) {
             return $query;

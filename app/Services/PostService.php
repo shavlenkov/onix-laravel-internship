@@ -6,7 +6,7 @@ use App\Models\Post;
 
 class PostService
 {
-    public function getPosts($keywords, $status) {
+    public function getPosts(?string $keywords, string $status) {
 
         if($status == 'my') {
             $posts = Post::title($keywords)
@@ -27,7 +27,7 @@ class PostService
         return $posts;
     }
 
-    public function createPost($data, $keywords) {
+    public function createPost(array $data, ?string $keywords) {
 
         if(!empty($data['cover'])) {
             $cover = $data['cover'];
@@ -40,7 +40,7 @@ class PostService
 
     }
 
-    public function updatePost(Post $post, $data, $keywords) {
+    public function updatePost(Post $post, array $data, ?string $keywords) {
 
         [
             'title' => $title,
