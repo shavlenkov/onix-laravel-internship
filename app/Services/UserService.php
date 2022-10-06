@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use Auth;
+
 use App\Models\Post;
 use App\Models\User;
 
@@ -40,17 +42,29 @@ class UserService
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return $token;
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 
     public function loginUser($data) {
+
+        if (!Auth::attempt($data)) {
+            return response()->json([
+                'message' => 'Invalid login details'
+            ], 401);
+        }
+
         $user = User::where('email', $data['email'])->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return $token;
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
-
 
     public function updateUser(User $user, $data) {
 
