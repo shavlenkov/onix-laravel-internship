@@ -29,12 +29,8 @@ class AuthController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $token = $this->userService->registerUser($data);
+        return $this->userService->registerUser($data);
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
     }
 
     public function postSignin(Request $request) {
@@ -44,18 +40,8 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Invalid login details'
-            ], 401);
-        }
+        return $this->userService->loginUser($data);
 
-        $token = $this->userService->loginUser($data);
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
     }
 
     public function getSignout()
