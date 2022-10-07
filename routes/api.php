@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\UserController;
 Route::prefix('auth')->group(function() {
     Route::post('/signup', [AuthController::class, 'postSignup']);
     Route::post('/signin', [AuthController::class, 'postSignin']);
-    Route::post('/signout', [AuthController::class, 'getSignout'])->middleware('auth:sanctum');
+    Route::post('/signout', [AuthController::class, 'postSignout'])->middleware('auth:sanctum');
 });
 
 Route::get('/posts/search', [PostController::class, 'search']);
