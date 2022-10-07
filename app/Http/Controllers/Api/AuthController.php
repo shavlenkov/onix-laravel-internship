@@ -44,7 +44,7 @@ class AuthController extends Controller
 
     }
 
-    public function getSignout()
+    public function postSignout()
     {
 
         Auth::user()->currentAccessToken()->delete();
