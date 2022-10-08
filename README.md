@@ -32,12 +32,15 @@ DB_PASSWORD=
 7. Підключитися до контейнера:
 
    `docker exec -it onix-laravel-internship_laravel.test_1 bash`
-   1. Згенерувати App Key:
+   1. Дати коректні права доступу до папки storage і bootstrap:
+   
+      `chmod -R 777 ./storage ./bootstrap`
+   2. Згенерувати App Key:
    
       `php artisan key:generate`
-   2. Запустити міграції:
+   3. Запустити міграції:
    
       `php artisan migrate`
-   3. Створити Symbolic Link:
+   4. Створити Symbolic Link:
    
       `php artisan storage:link`
